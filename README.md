@@ -334,7 +334,7 @@ Record useful electrode positions in the Action Profile's **Electrode placement 
 The firmware is located in:
 
 ```text
-firmware/arduino-uno.ino
+firmware/arduino-uno/arduino-uno.ino
 ```
 
 It performs signal acquisition only.
@@ -356,7 +356,7 @@ Connect the Arduino Uno to your computer using a USB **data** cable.
 Open:
 
 ```text
-firmware/arduino-uno.ino
+firmware/arduino-uno/arduino-uno.ino
 ```
 
 in Arduino IDE.

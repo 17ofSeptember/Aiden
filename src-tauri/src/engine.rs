@@ -395,22 +395,22 @@ impl Engine {
             }
         }
     }
-        fn sample(&mut self, s: Sample) {
-            self.samples += 1;
-            self.leads = s.leads;
-            self.adc = s.adc;
+    fn sample(&mut self, s: Sample) {
+        self.samples += 1;
+        self.leads = s.leads;
+        self.adc = s.adc;
 
-            if s.leads != 0 || s.adc < 2 || s.adc > 1021 {
-                tracing::error!(
-                    leads = s.leads,
-                    adc = s.adc,
-                    "BAD SAMPLE: lead-off or ADC clipping"
-                );
+        if s.leads != 0 || s.adc < 2 || s.adc > 1021 {
+            tracing::error!(
+                leads = s.leads,
+                adc = s.adc,
+                "BAD SAMPLE: lead-off or ADC clipping"
+            );
 
-        // Ignore invalid samples during training instead of silently
-        // cancelling the entire training session.
-        return;
-    }
+            // Ignore invalid samples during training instead of silently
+            // cancelling the entire training session.
+            return;
+        }
         let timer = Instant::now();
         self.pipeline.step(&s);
         self.dsp_us = timer.elapsed().as_micros() as u64;
