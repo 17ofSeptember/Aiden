@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use Aiden in a project, publication, or demonstration, please cite the software."
+title: "Aiden"
+type: software
+authors:
+  - given-names: "Sam"
+    family-names: "17ofSeptember"
+version: 0.1.1
+repository-code: "https://github.com/17ofSeptember/Aiden"
+url: "https://github.com/17ofSeptember/Aiden"
+license: BSD-3-Clause
+keywords:
+  - biosignal
+  - human-computer interaction
+  - signal processing
+  - Arduino
+  - AD8232
+  - Tauri
+  - Rust

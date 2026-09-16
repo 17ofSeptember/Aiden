@@ -1,0 +1,68 @@
+name: Feature Request
+description: Propose an improvement, new node, hardware interface, workflow feature, or platform capability.
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What limitation or workflow would this feature address?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed feature
+      description: Describe the behavior you would like Aiden to support.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Biosignal / recognition
+        - Hardware / sensor support
+        - Arduino / firmware
+        - Node graph
+        - Mouse / keyboard control
+        - System actions
+        - Timing / logic nodes
+        - Windows
+        - Linux
+        - UI / UX
+        - Import / export / persistence
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware details
+      description: For sensor/hardware proposals, include device name, connection method, expected sample rate, and whether you can physically test it.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe any current workaround or alternative design you considered.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Project fit
+      options:
+        - label: The request can work with Aiden's local-first architecture.
+          required: true
+        - label: I understand new hardware support requires real validation before it can be documented as supported.
+          required: true

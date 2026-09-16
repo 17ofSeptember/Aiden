@@ -1,0 +1,123 @@
+name: Bug Report
+description: Report reproducible incorrect behavior in Aiden.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please provide enough detail to reproduce the problem. Do not post passwords, secrets, private keys, or biosignal recordings you do not intend to make public.
+
+  - type: input
+    id: version
+    attributes:
+      label: Aiden version
+      description: Example: 0.1.1
+      placeholder: "0.1.1"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows 11
+        - Windows 10
+        - Linux X11
+        - Linux Wayland
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os_details
+    attributes:
+      label: OS details
+      description: Distribution/version, architecture, or other useful platform details.
+      placeholder: "Linux Mint 22.x x86_64, or Windows 11 x64"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: Signal source
+      options:
+        - Arduino Uno + AD8232
+        - Simulation
+        - Recording playback
+        - Other / experimental
+    validations:
+      required: true
+
+  - type: input
+    id: hardware
+    attributes:
+      label: Hardware details
+      description: Include Arduino/sensor details when this is a hardware issue.
+      placeholder: "Arduino Uno + AD8232"
+    validations:
+      required: false
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the incorrect behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Give the smallest reliable sequence that reproduces the issue.
+      placeholder: |
+        1. Open...
+        2. Connect...
+        3. Train...
+        4. Observe...
+    validations:
+      required: true
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics or logs
+      description: Paste only relevant, reviewed output. Remove private paths or personal information if needed.
+      render: text
+    validations:
+      required: false
+
+  - type: dropdown
+    id: control_mode
+    attributes:
+      label: Control mode when the problem occurred
+      options:
+        - Monitoring Off
+        - Test Graph
+        - Computer Control On
+        - Not applicable / unknown
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: I have not included credentials, secrets, or private information.
+          required: true
+        - label: I understand Aiden is not a medical device and this report is about software/hardware behavior, not medical interpretation.
+          required: true

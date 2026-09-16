@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: Frontend - ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run frontend tests
+        run: npm test
+
+      - name: Build frontend
+        run: npm run build
+
+  rust:
+    name: Rust - ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux desktop dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            pkg-config \
+            libwebkit2gtk-4.1-dev \
+            libudev-dev \
+            libxdo-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            patchelf
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt,clippy
+
+      - name: Check formatting
+        run: cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+
+      - name: Clippy
+        run: cargo clippy --locked --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
+
+      - name: Run Rust tests
+        run: cargo test --locked --manifest-path src-tauri/Cargo.toml --all-targets
+
+  firmware:
+    name: Arduino Uno firmware
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Arduino AVR core
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+
+      - name: Prepare sketch directory
+        run: |
+          mkdir -p .ci/arduino-uno
+          cp firmware/arduino-uno.ino .ci/arduino-uno/arduino-uno.ino
+
+      - name: Compile Arduino Uno firmware
+        run: arduino-cli compile --fqbn arduino:avr:uno .ci/arduino-uno

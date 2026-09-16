@@ -1,0 +1,45 @@
+[package]
+name = "aiden"
+version = "0.1.1"
+edition = "2021"
+description = "Local deterministic biopotential interface"
+authors = ["Sam (17ofSeptember)"]
+
+[lib]
+name = "aiden_core"
+
+[[bin]]
+name = "aiden"
+path = "src/main.rs"
+required-features = ["desktop"]
+
+[features]
+default = ["desktop"]
+desktop = ["dep:tauri", "dep:tauri-build", "dep:tauri-plugin-global-shortcut"]
+
+[build-dependencies]
+tauri-build = { version = "2", optional = true , features = [] }
+
+[dependencies]
+tauri = { version = "2", optional = true , features = [] }
+tauri-plugin-global-shortcut = { version = "2", optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+rusqlite = { version = "0.37", features = ["bundled", "backup"] }
+serialport = "4"
+crossbeam-channel = "0.5"
+uuid = { version = "1", features = ["v4", "serde"] }
+enigo = { version = "0.6", default-features = false, features = ["x11rb"] }
+open = "5"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["json"] }
+tracing-appender = "0.2"
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true

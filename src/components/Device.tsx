@@ -1,0 +1,16 @@
+import {useEffect, useState} from 'react';
+import {api} from '../api';
+import type {Snapshot} from '../types';
+interface Port {port: string; description: string}
+interface Connection {kind: string; port: string; baud: number; reconnect: boolean}
+export default function Device({snapshot, command}: {snapshot: Snapshot | null; command: (op: string, data?: unknown) => unknown}) {
+  const [ports, setPorts] = useState<Port[]>([]);
+  const [connection, setConnection] = useState<Connection>({kind: 'hardware', port: '', baud: 230400, reconnect: false});
+  const [error, setError] = useState('');
+  const refresh = () => void api<Port[]>('ports').then(setPorts).catch(e => setError(String(e)));
+  useEffect(() => { refresh(); void api<Partial<Connection>>('device_settings').then(v => setConnection(c => ({...c, ...v}))).catch(e => setError(String(e))); }, []);
+  return <div className="two-column"><section className="panel"><h2>Signal source</h2><p>Choose your Arduino explicitly, or use a local synthetic signal to exercise the same Rust processing pipeline.</p><label>Source<select value={connection.kind} onChange={e => setConnection({...connection, kind: e.target.value})}><option value="hardware">Arduino Uno / AD8232</option><option value="contraction">Simulation: periodic contraction</option><option value="sine">Simulation: sine signal</option><option value="noise">Simulation: baseline noise</option></select></label>
+    {connection.kind === 'hardware' && <><label>Serial port<input list="serial-ports" value={connection.port} onChange={e => setConnection({...connection, port: e.target.value})}/><datalist id="serial-ports">{ports.map(p => <option key={p.port} value={p.port}>{p.description}</option>)}</datalist></label><button onClick={refresh}>Refresh ports</button><label>Baud rate<select value={connection.baud} onChange={e => setConnection({...connection, baud: +e.target.value})}><option>230400</option><option>115200</option></select></label><p>The supplied firmware uses 230400 baud. Change its SERIAL_BAUD constant before using 115200.</p><label><input type="checkbox" checked={connection.reconnect} onChange={e => setConnection({...connection, reconnect: e.target.checked})}/>Reconnect automatically; monitoring stays off</label></>}
+    <div className="button-row"><button className="primary" onClick={() => command('connect', connection)}>Connect</button><button onClick={() => command('disconnect')}>Disconnect</button></div>{error && <p role="alert">{error}</p>}
+  </section><section className="panel"><h2>Connection diagnostics</h2><dl>{Object.entries({Status: snapshot?.device ?? 'Unavailable', Source: snapshot?.source ?? 'None', Firmware: snapshot?.firmware ?? '—', Protocol: snapshot?.protocol ?? '—', 'Sample rate': `${snapshot?.rate ?? 0} Hz`, Samples: snapshot?.samples ?? 0, 'Dropped samples': snapshot?.dropped ?? 0, 'CRC errors': snapshot?.corrupt ?? 0, 'Lead status': snapshot?.leads ? 'Connection lost or acquisition overflow' : 'No lead-off flags', 'Live ADC': snapshot?.adc ?? '—', 'Baseline noise': snapshot?.noise?.toFixed(5) ?? '—', 'Baseline ready': snapshot?.ready ? 'Yes' : 'No'}).map(([key,value]) => <div key={key}><dt>{key}</dt><dd>{value}</dd></div>)}</dl><p>This is a human-interface sensor, not a medical device. Waveforms and lead status have no diagnostic interpretation.</p></section></div>;
+}

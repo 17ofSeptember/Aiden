@@ -1,0 +1,82 @@
+# ------------------------------------------------------------
+# Aiden repository exclusions
+# ------------------------------------------------------------
+
+# Node / frontend
+node_modules/
+dist/
+.vite/
+coverage/
+playwright-report/
+test-results/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Rust / Tauri
+target/
+src-tauri/target/
+**/*.rs.bk
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local Aiden runtime data
+aiden.db
+aiden.db-*
+*.db
+*.db-shm
+*.db-wal
+recordings/
+profiles/
+workspaces/
+backups/
+exports/
+logs/
+
+# Packaged application artifacts
+*.msi
+*.exe
+*.deb
+*.rpm
+*.AppImage
+*.dmg
+
+# IDE / editor
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# Python helper environments/caches, if used locally
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Owner-only repository preparation material.
+# Delete this folder before publishing. It is ignored as an extra safeguard.
+Instructions/

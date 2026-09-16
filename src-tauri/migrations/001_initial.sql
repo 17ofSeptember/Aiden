@@ -1,0 +1,13 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE schema_version(version INTEGER PRIMARY KEY, applied_at INTEGER NOT NULL);
+INSERT INTO schema_version VALUES(1, unixepoch());
+CREATE TABLE workspaces(id TEXT PRIMARY KEY, name TEXT NOT NULL, updated_at INTEGER NOT NULL);
+INSERT INTO workspaces VALUES('default','My workspace',unixepoch());
+CREATE TABLE nodes(id TEXT PRIMARY KEY, workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, definition TEXT NOT NULL CHECK(json_valid(definition)));
+CREATE TABLE edges(id TEXT PRIMARY KEY, workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, source TEXT NOT NULL REFERENCES nodes(id) ON DELETE CASCADE, target TEXT NOT NULL REFERENCES nodes(id) ON DELETE CASCADE, definition TEXT NOT NULL CHECK(json_valid(definition)));
+CREATE TABLE action_profiles(id TEXT PRIMARY KEY, metadata TEXT NOT NULL CHECK(json_valid(metadata)));
+CREATE TABLE training_examples(id TEXT PRIMARY KEY, profile_id TEXT NOT NULL REFERENCES action_profiles(id) ON DELETE CASCADE, variant TEXT NOT NULL, negative INTEGER NOT NULL, data TEXT NOT NULL CHECK(json_valid(data)));
+CREATE TABLE settings(key TEXT PRIMARY KEY,value TEXT NOT NULL CHECK(json_valid(value)));
+CREATE TABLE recordings(id TEXT PRIMARY KEY,name TEXT NOT NULL,sample_rate INTEGER NOT NULL,created_at INTEGER NOT NULL,samples TEXT NOT NULL CHECK(json_valid(samples)));
+CREATE TABLE recovery(id INTEGER PRIMARY KEY CHECK(id=1),clean_shutdown INTEGER NOT NULL);
+INSERT INTO recovery VALUES(1,1);
