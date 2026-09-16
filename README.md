@@ -1,7 +1,9 @@
 # Aiden
+
 <img width="280" height="404" alt="logo" src="https://github.com/user-attachments/assets/59b89194-62c5-446b-a777-9961a9748781" />
 
 **Aiden is a cross-platform biosignal control interface that turns signals from the human body into computer commands.** Its node-based system lets users train biological inputs and connect them to mouse actions, keystrokes, shortcuts, timers, system controls, and more.
+
 <img width="2560" height="1040" alt="workspace" src="https://github.com/user-attachments/assets/6e78fafb-4a6a-428f-b4dc-4e68b0dc4ef7" />
 
 Aiden processes signals locally using deterministic digital signal processing and template matching. It does **not** use AI, machine learning, cloud processing, analytics, or telemetry.
