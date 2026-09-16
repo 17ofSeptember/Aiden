@@ -5,10 +5,10 @@
 For installation, configuration, training, node graphs, Arduino setup, or normal troubleshooting:
 
 1. Read `README.md`.
-2. Read `BUILDING.md` or `LINUX_SETUP.md` when relevant.
+2. Read the installation, building, and troubleshooting sections in `README.md` when relevant.
 3. Search existing GitHub issues.
 4. Open a bug report if behavior appears incorrect.
-5. Use GitHub Discussions for general questions if Discussions are enabled for the repository.
+5. Use the issue forms for reproducible bugs and concrete feature requests.
 
 Repository:
 
