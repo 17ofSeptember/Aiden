@@ -741,6 +741,7 @@ Displays project information and version details.
 ---
 
 # Training an Action
+<img width="2560" height="1038" alt="training" src="https://github.com/user-attachments/assets/26eca572-466f-4669-9762-c9599ac136c8" />
 
 An **Action Profile** represents a biological signal that Aiden should recognize.
 
@@ -1312,6 +1313,8 @@ Cooldown:          350 ms
 ```
 
 These values are adjustable in **Settings**.
+<img width="2560" height="1036" alt="settings" src="https://github.com/user-attachments/assets/678f92e3-5600-4d5f-9f99-80a0ba7621bf" />
+
 
 Changing signal-processing settings may invalidate existing trained profiles because the signal representation changes.
 
