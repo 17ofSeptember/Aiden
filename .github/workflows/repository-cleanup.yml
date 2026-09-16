@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   cleanup:
-    if: github.actor != 'github-actions[bot]'
+    if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -22,66 +22,23 @@ jobs:
         with:
           components: rustfmt
 
-      - name: Apply repository fixes
+      - name: Format Rust source
+        run: cargo fmt --manifest-path src-tauri/Cargo.toml
+
+      - name: Fix README firmware paths
         shell: bash
         run: |
-          cargo fmt --manifest-path src-tauri/Cargo.toml
-          python3 - <<'PY'
-          from pathlib import Path
+          python3 -c "from pathlib import Path; p=Path('README.md'); s=p.read_text(encoding='utf-8'); s=s.replace('firmware/arduino-uno.ino','firmware/arduino-uno/arduino-uno.ino'); s=s.replace('│   └── arduino-uno/arduino-uno.ino','│   └── arduino-uno/\\n│       └── arduino-uno.ino'); p.write_text(s, encoding='utf-8')"
 
-          readme = Path('README.md')
-          text = readme.read_text(encoding='utf-8')
-          text = text.replace('firmware/arduino-uno.ino', 'firmware/arduino-uno/arduino-uno.ino')
-          text = text.replace('├── firmware/\n│   └── arduino-uno.ino', '├── firmware/\n│   └── arduino-uno/\n│       └── arduino-uno.ino')
-          readme.write_text(text, encoding='utf-8')
-
-          support = Path('SUPPORT.md')
-          text = support.read_text(encoding='utf-8')
-          text = text.replace('2. Read `BUILDING.md` or `LINUX_SETUP.md` when relevant.', '2. Read the installation, building, and troubleshooting sections in `README.md` when relevant.')
-          text = text.replace('5. Use GitHub Discussions for general questions if Discussions are enabled for the repository.', '5. Use the issue forms for reproducible bugs and concrete feature requests.')
-          support.write_text(text, encoding='utf-8')
-
-          Path('.github/ISSUE_TEMPLATE/config.yml').write_text('''blank_issues_enabled: false
-contact_links:
-  - name: General questions and project support
-    url: https://github.com/17ofSeptember/Aiden/blob/main/SUPPORT.md
-    about: Read the support guide for installation, usage, troubleshooting, and where to ask for help.
-  - name: Security policy
-    url: https://github.com/17ofSeptember/Aiden/security/policy
-    about: Do not disclose security vulnerabilities in a public issue.
-''', encoding='utf-8')
-
-          ci = Path('.github/workflows/ci.yml')
-          text = ci.read_text(encoding='utf-8')
-          old = '''      - name: Prepare sketch directory
-        run: |
-          mkdir -p .ci/arduino-uno
-          cp firmware/arduino-uno.ino .ci/arduino-uno/arduino-uno.ino
-
-      - name: Compile Arduino Uno firmware
-        run: arduino-cli compile --fqbn arduino:avr:uno .ci/arduino-uno
-'''
-          new = '''      - name: Compile Arduino Uno firmware
-        run: arduino-cli compile --fqbn arduino:avr:uno firmware/arduino-uno
-'''
-          if old not in text:
-              raise SystemExit('Expected Arduino CI block was not found')
-          ci.write_text(text.replace(old, new), encoding='utf-8')
-
-          tauri = Path('src-tauri/tauri.conf.json')
-          text = tauri.read_text(encoding='utf-8').replace('Deterministic muscle-controlled computer interface', 'Deterministic biosignal-controlled computer interface')
-          tauri.write_text(text, encoding='utf-8')
-          PY
-
-      - name: Commit fixes
+      - name: Commit cleanup
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md SUPPORT.md .github/ISSUE_TEMPLATE/config.yml .github/workflows/ci.yml src-tauri src-tauri/tauri.conf.json
+          git add README.md src-tauri
           if git diff --cached --quiet; then
             echo "No cleanup changes needed."
             exit 0
           fi
-          git commit -m "Fix CI, documentation, and Rust formatting"
+          git commit -m "Format Rust source and fix README firmware paths"
           git push
