@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: General questions and ideas
-    url: https://github.com/17ofSeptember/Aiden/discussions
-    about: Use Discussions for questions that are not bug reports or concrete feature requests.
+  - name: General questions and project support
+    url: https://github.com/17ofSeptember/Aiden/blob/main/SUPPORT.md
+    about: Read the support guide for installation, usage, troubleshooting, and where to ask for help.
   - name: Security policy
     url: https://github.com/17ofSeptember/Aiden/security/policy
     about: Do not disclose security vulnerabilities in a public issue.
