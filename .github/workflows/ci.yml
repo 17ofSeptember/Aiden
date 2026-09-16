@@ -97,10 +97,5 @@ jobs:
           arduino-cli core update-index
           arduino-cli core install arduino:avr
 
-      - name: Prepare sketch directory
-        run: |
-          mkdir -p .ci/arduino-uno
-          cp firmware/arduino-uno.ino .ci/arduino-uno/arduino-uno.ino
-
       - name: Compile Arduino Uno firmware
-        run: arduino-cli compile --fqbn arduino:avr:uno .ci/arduino-uno
+        run: arduino-cli compile --fqbn arduino:avr:uno firmware/arduino-uno
